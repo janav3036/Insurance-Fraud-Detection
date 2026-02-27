@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class = "text-center"> 
+    <h1>Insurance Fraud Risk Engine</h1>
+    <p class = "lead mt-3"> 
+        A machine learning-powered web application designed to detect potential fraudulent insurance claims using engineered risk indicators and gradient boosting
+    </p>
+    <a href = "/prediction" class = 'btn btn-primary btn-lg mt-3'>
+        Try Insurance Fraud Detection
+    </a>
+</div>
+
+<hr class = 'my-5'>
+
+<h4>Why Fraud Detection Matters</h4>
+<p>Insurance fraud increases claim costs, premiums and operational inefficieinces. 
+    This project demonstrates how machine learning can assist insurers in identifying high-risk claims while balancing recall and precision trade-offs
+</p>
+{% endblock %}
