@@ -21,7 +21,7 @@ def risk_level(prob):
 def home():
     return render_template('home.html')
 
-@app.route('/predict', methods = ['POST', 'GET'])
+@app.route('/prediction', methods = ['POST', 'GET'])
 def prediction():
 
     if request.method == 'POST':
@@ -62,7 +62,24 @@ def prediction():
 
 @app.route('/dataset')
 def dataset():
-    return render_template('dataset.html')
+    df = pd.read_csv('data/raw_data_1.csv')
+
+    preview = df.head(10)
+    table = preview.to_html(classes = 'table table-striped table-bordered', index = False)
+
+    total_records = len(df)
+    fraud_counts = df['fraud reported'].value_counts().to_dict()
+    fraud_yes = fraud_counts.get('Y', 0)
+    fraud_no = fraud_counts.get('N', 0)
+
+    return render_template(
+        'dataset.html', 
+        table = table,
+        total_records = total_records,
+        fraud_yes = fraud_yes,
+        fraud_no = fraud_no   
+    )
+
 
 @app.route('/feature_engineering')
 def feature_engineering():
@@ -76,5 +93,6 @@ def model_info():
 def about():
     return render_template('about.html')
 
-
+if __name__ == '__main__':
+    app.run(debug=True)
     

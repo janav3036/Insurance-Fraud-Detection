@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Dataset Overview</h2>
+<div class = 'mb-4'>
+    <hr>
+    <p><strong> Total Records:</strong> {{total_records}}</p>
+    <p><strong>Fraud Distribution: </strong></p>
+    <div style = 'width: 200px'>
+        <canvas id = 'fraudChart'> </canvas>
+    </div>
+</div>
+<hr class = 'my-4'>
+
+<h4>Sample Records</h4>
+<div class = 'table-responsive'>
+    {{table | safe}}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('fraudChart');
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Non-Fraud', 'Fraud'],
+        datasets: [{
+            label: 'Number of Claims',
+            data: [Number("{{ fraud_no }}"), Number("{{ fraud_yes }}")],
+            backgroundColor: ['#198754', '#dc3545']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
