@@ -1,0 +1,73 @@
+{%extends 'base.html' %}
+{% block content %}
+
+<h2>Model</h2>
+<hr>
+
+<p>
+    To identify potentially fraudulent claims, a supervised machine learning model was trained using the engineered dataset.
+    The chosen algorithm for this project is <strong>XG Boost (Extreme Gradient Boosting)</strong>, a powerful ensemble learning method used widely for structured data problems.
+</p>
+<hr>
+
+<h4>Why XGBoost?</h4>
+<ul>
+    <li>Excellent performance on tabular dataset</li>
+    <li>Handles non linear relationships between features</li>
+    <li>Built-in regularization to reduce overfitting</li>
+    <li>Works well with imbalanced datasets</li>
+</ul>
+<hr>
+
+<h4>Handling Class Imbalance</h4>
+<p>
+Insurance fraud datasets are typically imbalanced because fraudulent claims are much rarer than legitimate ones.
+To address this issue, the model was trained using the <strong>scale_pos_weight</strong> parameter to balance
+fraud and non-fraud observations.
+</p>
+
+<p>
+Additionally, the classification threshold was adjusted to prioritize <strong>recall</strong>, ensuring
+that fraudulent claims are more likely to be detected even at the cost of some false positives.
+</p>
+
+<hr>
+
+<h4>Model Performance</h4>
+
+<p>
+The model was evaluated using several metrics including accuracy, precision, recall, and ROC-AUC.
+</p>
+
+<ul>
+<li><strong>ROC-AUC Score:</strong> ~0.63</li>
+<li><strong>Fraud Recall:</strong> ~0.75+</li>
+<li><strong>Accuracy:</strong> ~0.48</li>
+</ul>
+
+<p>
+In fraud detection, recall is often prioritized because missing fraudulent claims can be more costly
+than incorrectly flagging legitimate ones.
+</p>
+
+<hr>
+
+<h4>Confusion Matrix</h4>
+
+<p>
+The confusion matrix shows the distribution of correct and incorrect predictions.
+</p>
+
+<img src="/static/confusion_matrix.png" class="img-fluid" alt="Confusion Matrix">
+
+<hr>
+
+<h4>ROC Curve</h4>
+
+<p>
+The ROC curve illustrates the model's ability to distinguish between fraudulent and non-fraudulent claims.
+</p>
+
+<img src="/static/roc_curve.png" class="img-fluid" alt="ROC Curve">
+
+{% endblock %}
