@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Feature Engineering</h2>
+<hr>
+
+<p>
+    To improve fraud detection, several derived features were created from the raw dataset.
+    These engineered variables capture behavioral and financial patterns that indicate any suspiscious claims.
+</p>
+<hr>
+
+<h4>Claim to Vehicle Ratio</h4>
+<p>
+    <strong>Formula: </strong>total_claim/vehicle_price
+</p>
+<p> 
+    This feature measures how large a claim is relative to the value of the vehicle.
+    Fraudulent claims often involve inflated damage amounts compared to the vehicle'a actual value. 
+</p>
+
+<hr>
+
+<h4>Injury to Vehicle Ratio</h4>
+<p>
+    <strong>Formula: </strong> injury_claim/total_claim
+</p>
+<p>
+    This captures the proportion of the claim attributed to injury.
+    Exaggerated injury costs can be a common indicator of insurance fraud.
+</p>
+
+<hr>
+
+<h4>Income to Claim Ratio</h4>
+<p>
+    <strong>Formula: </strong> total_claim/annual_income
+</p>
+<p>
+    A very large claim compared to a policyholder's annual income may indicate financial motivation for fraudulent activity.
+</p>
+
+<hr>
+
+<h4>4. Deductible to Claim Ratio</h4>
+<p>
+<strong>Formula:</strong> policy_deductible / total_claim
+</p>
+<p>
+This shows how significant the deductible is relative to the claim amount.
+Fraudulent claims often try to maximize payouts above the deductible threshold.
+</p>
+
+<hr>
+
+<h4>5. Repeat Claim Flag</h4>
+<p>
+This binary feature identifies claimants with more than two past claims.
+Frequent claim history can increase fraud risk.
+</p>
+
+<hr>
+
+<h4>6. Days Open Flag</h4>
+<p>
+Claims that stay open for longer than the dataset median may indicate complications, investigations, or suspicious activity.
+</p>
+
+<hr>
+
+<h4>7. Claim Severity Index</h4>
+<p>
+<strong>Formula:</strong> total_claim / (policy_deductible + 1)
+</p>
+<p>
+This feature combines claim size with deductible value to capture the relative severity of the claim.
+</p>
+
+<hr>
+
+<h4>8. High Claim Flag</h4>
+<p>
+A binary indicator for unusually large claims based on the upper distribution of claim amounts.
+Large claims have a higher probability of containing fraudulent behavior.
+</p>
+
+{% endblock %}
+

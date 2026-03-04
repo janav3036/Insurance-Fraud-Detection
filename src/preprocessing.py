@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np 
 
-df = pd.read_csv('data/raw_data_1.csv')
+df = pd.read_csv('data/raw_data_1.csv')   
 
 df = df.replace('*', np.nan)
 
