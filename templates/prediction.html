@@ -1,18 +1,188 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Insurance Fraud Prediction</h2>
-<form method = 'POST' class = 'row g-3 mt-3'>
-    <div class = 'col-md-4'>
-        <label>Total Claim</label>
-        <input type="number" name = 'total claim' step = 'any' class ='form-control' required>
+<h2>Fraud Risk Prediction</h2>
+<hr>
 
-    </div>
+<form method="POST" action="/prediction">
 
-    <div class = 'col-md-4'>
-        <label> </label>
-        <input type = 'number' name 
-    </div>
+<div class="row g-3">
+
+<div class="col-md-3">
+<label>Age of Driver</label>
+<input type="number" name="age_of_driver" class="form-control" required>
+</div>
+
+<div class="col-md-3">
+<label>Gender</label>
+<select name="gender" class="form-control">
+<option>Male</option>
+<option>Female</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Marital Status</label>
+<select name="marital_status" class="form-control">
+<option>Single</option>
+<option>Married</option>
+<option>Divorced</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Annual Income</label>
+<input type="number" name="annual_income" class="form-control" required>
+</div>
+
+<div class="col-md-3">
+<label>Safety Rating</label>
+<input type="number" name="safety_rating" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>High Education</label>
+<select name="high_education" class="form-control">
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Address Change</label>
+<select name="address_change" class="form-control">
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Property Status</label>
+<select name="property_status" class="form-control">
+<option>Own</option>
+<option>Rent</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Claim Date</label>
+<input type="date" name="claim_date" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Claim Day</label>
+<select name="claim_day_of_week" class="form-control">
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+<option>Sunday</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Accident Site</label>
+<select name="accident_site" class="form-control">
+<option>Highway</option>
+<option>Street</option>
+<option>Parking Lot</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Past Claims</label>
+<input type="number" name="past_num_of_claims" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Witness Present</label>
+<select name="witness_present" class="form-control">
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Police Report</label>
+<select name="police_report" class="form-control">
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Liability %</label>
+<input type="number" name="liab_prct" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Channel</label>
+<select name="channel" class="form-control">
+<option>Agent</option>
+<option>Online</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Age of Vehicle</label>
+<input type="number" name="age_of_vehicle" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Vehicle Category</label>
+<select name="vehicle_category" class="form-control">
+<option>Sedan</option>
+<option>SUV</option>
+<option>Sports</option>
+</select>
+</div>
+
+<div class="col-md-3">
+<label>Vehicle Price</label>
+<input type="number" name="vehicle_price" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Total Claim</label>
+<input type="number" name="total_claim" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Injury Claim</label>
+<input type="number" name="injury_claim" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Policy Deductible</label>
+<input type="number" name="policy_deductible" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Annual Premium</label>
+<input type="number" name="annual_premium" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Days Open</label>
+<input type="number" name="days_open" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Form Defects</label>
+<select name="form_defects" class="form-control">
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+</div>
+
+<br>
+
+<button class="btn btn-primary btn-lg">Predict Fraud Risk</button>
+
 </form>
 
 {% endblock %}

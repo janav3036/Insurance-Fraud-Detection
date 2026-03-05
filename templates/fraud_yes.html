@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="text-danger">High Fraud Risk Detected</h2>
+<hr>
+
+<p>
+The claim submitted shows characteristics commonly associated with fraudulent activity.
+Further investigation is recommended before approval.
+</p>
+
+<a href="/prediction" class="btn btn-primary">
+Try Another Prediction
+</a>
+
+{% endblock %}

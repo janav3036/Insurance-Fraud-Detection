@@ -21,44 +21,125 @@ def risk_level(prob):
 def home():
     return render_template('home.html')
 
-@app.route('/prediction', methods = ['POST', 'GET'])
+from flask import request, redirect, url_for
+import pandas as pd
+import numpy as np
+
+@app.route("/prediction", methods=["GET", "POST"])
 def prediction():
 
-    if request.method == 'POST':
-        try:
-            data = {
-                'total_claim' : float(request.form['total_claim']),
-                'injury_claim': float(request.form['injury_claim']),
-                'vehicle_price': float(request.form['vehicle_price']),
-            }
+    if request.method == "POST":
 
-            df = pd.DataFrame([data])
+        # -------- Collect Inputs --------
+        data = {
+            "age_of_driver": int(request.form["age_of_driver"]),
+            "gender": request.form["gender"],
+            "marital_status": request.form["marital_status"],
+            "safety_rating": int(request.form["safety_rating"]),
+            "annual_income": float(request.form["annual_income"]),
+            "high_education": request.form["high_education"],
+            "address_change": request.form["address_change"],
+            "property_status": request.form["property_status"],
+            "claim_date": request.form["claim_date"],
+            "claim_day_of_week": request.form["claim_day_of_week"],
+            "accident_site": request.form["accident_site"],
+            "past_num_of_claims": int(request.form["past_num_of_claims"]),
+            "witness_present": request.form["witness_present"],
+            "liab_prct": float(request.form["liab_prct"]),
+            "channel": request.form["channel"],
+            "police_report": request.form["police_report"],
+            "age_of_vehicle": int(request.form["age_of_vehicle"]),
+            "vehicle_category": request.form["vehicle_category"],
+            "vehicle_price": float(request.form["vehicle_price"]),
+            "total_claim": float(request.form["total_claim"]),
+            "injury_claim": float(request.form["injury_claim"]),
+            "policy deductible": float(request.form["policy_deductible"]),
+            "annual premium": float(request.form["annual_premium"]),
+            "days open": float(request.form["days_open"]),
+            "form defects": request.form["form_defects"]
+        }
 
-            df['claim_to_vehicle'] = df['total_claim']/ df['vehicle_price']
-            df['injury_to_claim'] = df['injury_claim']/ df['total_claim']
-            df['income_to_claim'] = df['total_claim']/df['annual_income']
-            df['deductible_to_claim'] = df['policy_deductible']/df['total_claim']
+        df = pd.DataFrame([data])
 
-            df['repeat_claim_flag'] = np.where(df['past_num_of_claims'] > 2, 1, 0)
-            df['days_open_flag'] = np.where(df['days_open'] > median_days, 1, 0)
-            df['claim_severity_index'] = (df['total_claim']/ (df['policy_deductible'] +1))
-            df['claim_flag'] = np.where(df['total_claim'] > 50000, 1, 0)
+        # -------- Convert Yes/No fields --------
+        binary_cols = [
+            "witness_present",
+            "police_report",
+            "form defects",
+            "address_change",
+            "high_education"
+        ]
 
-            df = df.fillna(0)
+        for col in binary_cols:
+            df[col] = df[col].map({"Yes": 1, "No": 0})
 
-            train_df = pd.read_csv('data/processed_data.csv')
-            train_cols = train_df.drop('Fraud', axis = 1).columns
+        # -------- Claim Date Processing --------
+        df["claim_date"] = pd.to_datetime(df["claim_date"], errors="coerce")
 
-            df = df.reindex(columns = train_cols, fill_value = 0)
+        df["claim_month"] = df["claim_date"].dt.month
+        df["claim_weekend"] = (df["claim_date"].dt.weekday >= 5).astype(int)
 
-            prob = float(model.predict_proba(df)[:, 1][0])
-            risk = risk_level(prob)
-            return render_template('prediction.html', prob = round(prob*100, 2), risk = risk)
-        
-        except Exception as e:
-            return render_template('prediction.html', probability = 'Error', risk = str(e))
-        
-    return render_template('prediction.html')
+        df = df.drop(columns=["claim_date"])
+
+        # -------- Feature Engineering --------
+        df["claim_to_vehicle"] = df["total_claim"] / df["vehicle_price"]
+        df["injury_to_claim"] = df["injury_claim"] / df["total_claim"]
+        df["income_to_claim"] = df["total_claim"] / df["annual_income"]
+        df["deductible_to_claim"] = df["policy deductible"] / df["total_claim"]
+
+        df["repeat_claim_flag"] = np.where(
+            df["past_num_of_claims"] > 2, 1, 0
+        )
+
+        df["days_open_flag"] = np.where(
+            df["days open"] > median_days, 1, 0
+        )
+
+        df["claim_severity_index"] = (
+            df["total_claim"] / (df["policy deductible"] + 1)
+        )
+
+        df["high_claim_flag"] = np.where(
+            df["total_claim"] > 50000, 1, 0
+        )
+
+        # -------- One-Hot Encoding --------
+        categorical_cols = [
+            "gender",
+            "marital_status",
+            "property_status",
+            "accident_site",
+            "channel",
+            "vehicle_category",
+            "claim_day_of_week"
+        ]
+
+        df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+
+        # -------- Align With Training Columns --------
+        train_df = pd.read_csv("data/processed_data.csv")
+        train_columns = train_df.drop("Fraud", axis=1).columns
+
+        df = df.reindex(columns=train_columns, fill_value=0)
+
+        # -------- Prediction --------
+        prob = float(model.predict_proba(df)[:,1][0])
+
+        if prob > 0.5:
+            return redirect(url_for("fraud_yes"))
+        else:
+            return redirect(url_for("fraud_no"))
+
+    return render_template("prediction.html")
+
+
+@app.route('/prediction/yes')
+def fraud_yes():
+    return render_template("fraud_yes.html")
+
+@app.route('/prediction/no')
+def fraud_no():
+    return render_template("fraud_no.html")
 
 @app.route('/dataset')
 def dataset():
