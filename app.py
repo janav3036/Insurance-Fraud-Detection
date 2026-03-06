@@ -30,7 +30,6 @@ def prediction():
 
     if request.method == "POST":
 
-        # -------- Collect Inputs --------
         data = {
             "age_of_driver": int(request.form["age_of_driver"]),
             "gender": request.form["gender"],
@@ -61,7 +60,6 @@ def prediction():
 
         df = pd.DataFrame([data])
 
-        # -------- Convert Yes/No fields --------
         binary_cols = [
             "witness_present",
             "police_report",
@@ -73,7 +71,6 @@ def prediction():
         for col in binary_cols:
             df[col] = df[col].map({"Yes": 1, "No": 0})
 
-        # -------- Claim Date Processing --------
         df["claim_date"] = pd.to_datetime(df["claim_date"], errors="coerce")
 
         df["claim_month"] = df["claim_date"].dt.month
@@ -81,7 +78,6 @@ def prediction():
 
         df = df.drop(columns=["claim_date"])
 
-        # -------- Feature Engineering --------
         df["claim_to_vehicle"] = df["total_claim"] / df["vehicle_price"]
         df["injury_to_claim"] = df["injury_claim"] / df["total_claim"]
         df["income_to_claim"] = df["total_claim"] / df["annual_income"]
@@ -103,7 +99,6 @@ def prediction():
             df["total_claim"] > 50000, 1, 0
         )
 
-        # -------- One-Hot Encoding --------
         categorical_cols = [
             "gender",
             "marital_status",
@@ -116,13 +111,11 @@ def prediction():
 
         df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
 
-        # -------- Align With Training Columns --------
         train_df = pd.read_csv("data/processed_data.csv")
         train_columns = train_df.drop("Fraud", axis=1).columns
 
         df = df.reindex(columns=train_columns, fill_value=0)
 
-        # -------- Prediction --------
         prob = float(model.predict_proba(df)[:,1][0])
 
         if prob > 0.5:
