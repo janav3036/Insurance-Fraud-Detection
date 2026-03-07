@@ -1,16 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 class="text-danger">High Fraud Risk Detected</h2>
-<hr>
+<div class="card text-center mt-4">
 
-<p>
-The claim submitted shows characteristics commonly associated with fraudulent activity.
-Further investigation is recommended before approval.
-</p>
 
-<a href="/prediction" class="btn btn-primary">
-Try Another Prediction
-</a>
+<div class="card-body">
+
+    <h1 class="mb-3 fraud">⚠ Potential Fraud Detected</h1>
+
+    <p class="lead">
+        The model has identified this claim as having a high probability of fraud.
+    </p>
+
+    <p>
+        This does not necessarily confirm fraudulent behavior, but indicates that the claim
+        should be reviewed more carefully by investigators or fraud analysts.
+    </p>
+
+    <div class="mt-4">
+        <a href="/prediction" class="btn btn-primary">
+            Evaluate Another Claim
+        </a>
+    </div>
+
+</div>
+
+
+</div>
 
 {% endblock %}

@@ -1,42 +1,66 @@
-{%extends 'base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 
-<h2>Model</h2>
-<hr>
+<h1 class="mb-4">Model Overview</h1>
+
+<div class="card mb-4">
+<div class="card-body">
 
 <p>
-    To identify potentially fraudulent claims, a supervised machine learning model was trained using the engineered dataset.
-    The chosen algorithm for this project is <strong>XG Boost (Extreme Gradient Boosting)</strong>, a powerful ensemble learning method used widely for structured data problems.
+To identify potentially fraudulent insurance claims, a supervised machine learning model was trained
+using the engineered dataset. The algorithm selected for this project is
+<strong>XGBoost (Extreme Gradient Boosting)</strong>, a powerful ensemble learning method widely used
+for structured and tabular datasets.
 </p>
-<hr>
 
-<h4>Why XGBoost?</h4>
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>Why XGBoost?</h5>
+
 <ul>
-    <li>Excellent performance on tabular dataset</li>
-    <li>Handles non linear relationships between features</li>
-    <li>Built-in regularization to reduce overfitting</li>
-    <li>Works well with imbalanced datasets</li>
+<li>Strong performance on tabular datasets</li>
+<li>Captures complex non-linear relationships between features</li>
+<li>Built-in regularization helps reduce overfitting</li>
+<li>Handles imbalanced datasets effectively</li>
+<li>Highly scalable and widely used in real-world ML systems</li>
 </ul>
-<hr>
 
-<h4>Handling Class Imbalance</h4>
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>Handling Class Imbalance</h5>
+
 <p>
-Insurance fraud datasets are typically imbalanced because fraudulent claims are much rarer than legitimate ones.
-To address this issue, the model was trained using the <strong>scale_pos_weight</strong> parameter to balance
-fraud and non-fraud observations.
+Insurance fraud datasets are naturally imbalanced because fraudulent claims are far less common
+than legitimate ones. To address this issue, the model uses the
+<strong>scale_pos_weight</strong> parameter in XGBoost to adjust the importance
+of fraudulent observations during training.
 </p>
 
 <p>
-Additionally, the classification threshold was adjusted to prioritize <strong>recall</strong>, ensuring
-that fraudulent claims are more likely to be detected even at the cost of some false positives.
+Additionally, the classification threshold was adjusted to prioritize
+<strong>recall</strong>. In fraud detection systems, identifying fraudulent claims
+is often more important than minimizing false positives.
 </p>
 
-<hr>
+</div>
+</div>
 
-<h4>Model Performance</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>Model Performance</h5>
 
 <p>
-The model was evaluated using several metrics including accuracy, precision, recall, and ROC-AUC.
+The model was evaluated using several performance metrics including
+accuracy, precision, recall, and ROC-AUC.
 </p>
 
 <ul>
@@ -46,28 +70,45 @@ The model was evaluated using several metrics including accuracy, precision, rec
 </ul>
 
 <p>
-In fraud detection, recall is often prioritized because missing fraudulent claims can be more costly
-than incorrectly flagging legitimate ones.
+In fraud detection, recall is often prioritized because failing to detect fraudulent
+claims can lead to significant financial losses.
 </p>
 
-<hr>
+</div>
+</div>
 
-<h4>Confusion Matrix</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>Confusion Matrix</h5>
 
 <p>
-The confusion matrix shows the distribution of correct and incorrect predictions.
+The confusion matrix illustrates how the model classifies fraudulent and
+non-fraudulent claims.
 </p>
 
-<img src="/static/confusion_matrix.png" class="img-fluid" alt="Confusion Matrix">
+<img src="{{ url_for('static', filename='confusion_matrix.png') }}" 
+class="img-fluid rounded shadow-sm mt-3"
+alt="Confusion Matrix">
 
-<hr>
+</div>
+</div>
 
-<h4>ROC Curve</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>ROC Curve</h5>
 
 <p>
-The ROC curve illustrates the model's ability to distinguish between fraudulent and non-fraudulent claims.
+The ROC curve demonstrates the model's ability to distinguish between
+fraudulent and legitimate claims across different classification thresholds.
 </p>
 
-<img src="/static/roc_curve.png" class="img-fluid" alt="ROC Curve">
+<img src="{{ url_for('static', filename='roc_curve.png') }}" 
+class="img-fluid rounded shadow-sm mt-3"
+alt="ROC Curve">
+
+</div>
+</div>
 
 {% endblock %}

@@ -37,6 +37,54 @@ y_prob = model.predict_proba(x_test)[:, 1]
 threshold = 0.30
 y_pred = (y_prob > threshold).astype(int)
 
+from sklearn.metrics import ConfusionMatrixDisplay
+
+
+# -----------------------------
+# CONFUSION MATRIX EXPORT
+# -----------------------------
+
+cm = confusion_matrix(y_test, y_pred)
+
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=cm,
+    display_labels=["Non-Fraud", "Fraud"]
+)
+
+disp.plot(cmap="Blues")
+
+plt.title("Confusion Matrix")
+
+plt.savefig("static/confusion_matrix.png")
+
+plt.close()
+
+
+# -----------------------------
+# ROC CURVE EXPORT
+# -----------------------------
+
+fpr, tpr, _ = roc_curve(y_test, y_prob)
+
+roc_auc = roc_auc_score(y_test, y_prob)
+
+plt.figure()
+
+plt.plot(fpr, tpr, label=f"AUC = {roc_auc:.2f}", linewidth=2)
+
+plt.plot([0,1], [0,1], linestyle="--", color="gray")
+
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+
+plt.title("ROC Curve")
+
+plt.legend()
+
+plt.savefig("static/roc_curve.png")
+
+plt.close()
+
 print(classification_report(y_test, y_pred))
 print(confusion_matrix(y_test, y_pred))
 print(f'ROC AUC Score: {roc_auc_score(y_test, y_prob)}')

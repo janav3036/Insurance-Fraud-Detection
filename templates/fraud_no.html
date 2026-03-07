@@ -1,15 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 class="text-success">Low Fraud Risk</h2>
-<hr>
+<div class="card text-center mt-4">
 
-<p>
-The claim appears consistent with legitimate patterns based on the trained model.
-</p>
 
-<a href="/prediction" class="btn btn-primary">
-Try Another Prediction
-</a>
+<div class="card-body">
+
+    <h1 class="mb-3 safe">✓ Claim Appears Legitimate</h1>
+
+    <p class="lead">
+        The model predicts that this claim is unlikely to be fraudulent.
+    </p>
+
+    <p>
+        Based on the provided claim information and the trained fraud detection model,
+        this claim falls within normal behavioral patterns.
+    </p>
+
+    <div class="mt-4">
+        <a href="/prediction" class="btn btn-primary">
+            Evaluate Another Claim
+        </a>
+    </div>
+
+</div>
+
+
+</div>
 
 {% endblock %}

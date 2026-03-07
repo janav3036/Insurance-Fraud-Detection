@@ -2,12 +2,13 @@ from flask import Flask, render_template, request
 import joblib
 import pandas as pd
 import numpy as np
+from config import MODEL_PATH, MEDIAN_DAYS
 import os 
 
 app = Flask(__name__)
 
-model = joblib.load('model/fraud_detection.pkl')
-median_days = np.load('model/median_days.npy')
+model = joblib.load(MODEL_PATH)
+median_days = np.load(MEDIAN_DAYS)
 
 def risk_level(prob):
     if prob < 0.3:

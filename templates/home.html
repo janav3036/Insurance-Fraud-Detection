@@ -1,20 +1,139 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class = "text-center"> 
-    <h1>Insurance Fraud Risk Engine</h1>
-    <p class = "lead mt-3"> 
-        A machine learning-powered web application designed to detect potential fraudulent insurance claims using engineered risk indicators and gradient boosting
+<div class="card mb-4">
+
+
+<div class="card-body">
+
+    <h1 class="mb-3">Insurance Fraud Risk Engine</h1>
+
+    <p class="lead">
+        A machine learning system designed to identify potentially fraudulent insurance claims
+        using behavioral, financial, and claim-based indicators.
     </p>
-    <a href = "/prediction" class = 'btn btn-primary btn-lg mt-3'>
-        Try Insurance Fraud Detection
+
+    <p>
+        Insurance fraud results in billions of dollars in losses every year. This system applies
+        machine learning techniques to analyze claim characteristics and identify patterns that
+        may indicate suspicious activity.
+    </p>
+
+    <a href="/prediction" class="btn btn-primary mt-3">
+        Run Fraud Prediction
     </a>
+
 </div>
 
-<hr class = 'my-5'>
 
-<h4>Why Fraud Detection Matters</h4>
-<p>Insurance fraud increases claim costs, premiums and operational inefficieinces. 
-    This project demonstrates how machine learning can assist insurers in identifying high-risk claims while balancing recall and precision trade-offs
-</p>
+</div>
+
+<div class="row">
+
+
+<div class="col-md-4 mb-4">
+
+    <div class="card h-100">
+
+        <div class="card-body">
+
+            <h5 class="card-title">Dataset</h5>
+
+            <p>
+                Explore the insurance claims dataset used for training the model,
+                including claim counts and fraud distribution.
+            </p>
+
+            <a href="/dataset" class="btn btn-outline-primary">
+                View Dataset
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-4 mb-4">
+
+    <div class="card h-100">
+
+        <div class="card-body">
+
+            <h5 class="card-title">Feature Engineering</h5>
+
+            <p>
+                Learn how raw claim data was transformed into meaningful features
+                that improve fraud detection performance.
+            </p>
+
+            <a href="/feature_engineering" class="btn btn-outline-primary">
+                View Features
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="col-md-4 mb-4">
+
+    <div class="card h-100">
+
+        <div class="card-body">
+
+            <h5 class="card-title">Model</h5>
+
+            <p>
+                Understand the machine learning model used to classify claims
+                as legitimate or potentially fraudulent.
+            </p>
+
+            <a href="/model" class="btn btn-outline-primary">
+                View Model Details
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+<div class="card mt-4">
+
+
+<div class="card-body">
+
+    <h4>How the System Works</h4>
+
+    <ol>
+
+        <li>
+            Claim data is processed and cleaned using preprocessing techniques.
+        </li>
+
+        <li>
+            Derived features are generated to capture financial and behavioral patterns.
+        </li>
+
+        <li>
+            A trained machine learning model evaluates the claim characteristics.
+        </li>
+
+        <li>
+            The system predicts whether the claim is likely legitimate or potentially fraudulent.
+        </li>
+
+    </ol>
+
+</div>
+
+</div>
+
 {% endblock %}

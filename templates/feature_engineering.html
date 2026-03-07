@@ -1,88 +1,136 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Feature Engineering</h2>
-<hr>
+<h1 class="mb-4">Feature Engineering</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+
+
+    <p>
+        To improve fraud detection performance, several derived variables were created from the raw dataset.
+        These engineered features capture financial relationships, behavioral patterns, and claim characteristics
+        that may indicate suspicious insurance activity.
+    </p>
+
+</div>
+
+
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>1. Claim to Vehicle Ratio</h5>
+
+<p><strong>Formula:</strong> total_claim / vehicle_price</p>
 
 <p>
-    To improve fraud detection, several derived features were created from the raw dataset.
-    These engineered variables capture behavioral and financial patterns that indicate any suspiscious claims.
+This feature measures how large a claim is relative to the value of the vehicle.
+Fraudulent claims often involve inflated damage amounts compared to the vehicle's actual value.
 </p>
-<hr>
 
-<h4>Claim to Vehicle Ratio</h4>
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>2. Injury to Claim Ratio</h5>
+
+<p><strong>Formula:</strong> injury_claim / total_claim</p>
+
 <p>
-    <strong>Formula: </strong>total_claim/vehicle_price
-</p>
-<p> 
-    This feature measures how large a claim is relative to the value of the vehicle.
-    Fraudulent claims often involve inflated damage amounts compared to the vehicle'a actual value. 
+This captures the proportion of the claim attributed to injury-related costs.
+Exaggerated injury claims can sometimes indicate fraudulent activity.
 </p>
 
-<hr>
+</div>
+</div>
 
-<h4>Injury to Vehicle Ratio</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>3. Income to Claim Ratio</h5>
+
+<p><strong>Formula:</strong> total_claim / annual_income</p>
+
 <p>
-    <strong>Formula: </strong> injury_claim/total_claim
+A claim amount that is extremely large relative to a policyholder’s income
+may indicate financial motivation for fraudulent behavior.
 </p>
+
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>4. Deductible to Claim Ratio</h5>
+
+<p><strong>Formula:</strong> policy_deductible / total_claim</p>
+
 <p>
-    This captures the proportion of the claim attributed to injury.
-    Exaggerated injury costs can be a common indicator of insurance fraud.
+This feature measures how significant the deductible is compared to the total claim amount.
+Fraudulent claims sometimes attempt to maximize payouts above deductible thresholds.
 </p>
 
-<hr>
+</div>
+</div>
 
-<h4>Income to Claim Ratio</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>5. Repeat Claim Flag</h5>
+
 <p>
-    <strong>Formula: </strong> total_claim/annual_income
+A binary feature that identifies claimants with more than two previous claims.
+Frequent claims may increase the likelihood of suspicious activity.
 </p>
+
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>6. Days Open Flag</h5>
+
 <p>
-    A very large claim compared to a policyholder's annual income may indicate financial motivation for fraudulent activity.
+This flag identifies claims that remain open longer than the dataset median.
+Extended claim durations may indicate investigations, disputes, or complex claim behavior.
 </p>
 
-<hr>
+</div>
+</div>
 
-<h4>4. Deductible to Claim Ratio</h4>
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>7. Claim Severity Index</h5>
+
+<p><strong>Formula:</strong> total_claim / (policy_deductible + 1)</p>
+
 <p>
-<strong>Formula:</strong> policy_deductible / total_claim
+This feature combines claim size and deductible value to measure the relative severity
+of a claim compared to the insured policy structure.
 </p>
+
+</div>
+</div>
+
+<div class="card mb-4">
+<div class="card-body">
+
+<h5>8. High Claim Flag</h5>
+
 <p>
-This shows how significant the deductible is relative to the claim amount.
-Fraudulent claims often try to maximize payouts above the deductible threshold.
+A binary indicator for unusually large claims based on the upper percentile
+of claim values in the dataset. Large claims tend to have a higher probability
+of containing fraudulent activity.
 </p>
 
-<hr>
-
-<h4>5. Repeat Claim Flag</h4>
-<p>
-This binary feature identifies claimants with more than two past claims.
-Frequent claim history can increase fraud risk.
-</p>
-
-<hr>
-
-<h4>6. Days Open Flag</h4>
-<p>
-Claims that stay open for longer than the dataset median may indicate complications, investigations, or suspicious activity.
-</p>
-
-<hr>
-
-<h4>7. Claim Severity Index</h4>
-<p>
-<strong>Formula:</strong> total_claim / (policy_deductible + 1)
-</p>
-<p>
-This feature combines claim size with deductible value to capture the relative severity of the claim.
-</p>
-
-<hr>
-
-<h4>8. High Claim Flag</h4>
-<p>
-A binary indicator for unusually large claims based on the upper distribution of claim amounts.
-Large claims have a higher probability of containing fraudulent behavior.
-</p>
+</div>
+</div>
 
 {% endblock %}
-
