@@ -135,26 +135,71 @@ def fraud_yes():
 def fraud_no():
     return render_template("fraud_no.html")
 
-@app.route('/dataset')
+@app.route("/dataset")
 def dataset():
-    df = pd.read_csv('data/raw_data_1.csv')
 
-    preview = df.head(10)
-    table = preview.to_html(classes = 'table table-striped table-bordered', index = False)
+    import pandas as pd
 
-    total_records = len(df)
-    fraud_counts = df['fraud reported'].value_counts().to_dict()
-    fraud_yes = fraud_counts.get('Y', 0)
-    fraud_no = fraud_counts.get('N', 0)
+    df = pd.read_csv("data/processed_data.csv")
+    df_raw = pd.read_csv("data/raw_data_1.csv")
 
-    return render_template(
-        'dataset.html', 
-        table = table,
-        total_records = total_records,
-        fraud_yes = fraud_yes,
-        fraud_no = fraud_no   
+    df_raw["Fraud"] = df_raw["fraud reported"].map({"Y":1,"N":0})
+
+    total_records = int(len(df))
+
+    fraud_yes = int(df["Fraud"].sum())
+    fraud_no = int(total_records - fraud_yes)
+
+    fraud_rate = round((fraud_yes / total_records) * 100, 2)
+
+
+    claim_bins = ["0-5k","5k-10k","10k-20k","20k+"]
+
+    claim_counts = [
+        int((df["total_claim"] <= 5000).sum()),
+        int(((df["total_claim"] > 5000) & (df["total_claim"] <= 10000)).sum()),
+        int(((df["total_claim"] > 10000) & (df["total_claim"] <= 20000)).sum()),
+        int((df["total_claim"] > 20000).sum())
+    ]
+
+
+    site_data = df_raw[df_raw["Fraud"] == 1]["accident_site"].value_counts()
+
+    site_labels = site_data.index.tolist()
+    site_values = [int(x) for x in site_data.values]
+
+
+    channel_data = df_raw[df_raw["Fraud"] == 1]["channel"].value_counts()
+
+    channel_labels = channel_data.index.tolist()
+    channel_values = [int(x) for x in channel_data.values]
+
+
+    table = df_raw.head(20).to_html(
+        classes="table table-striped",
+        index=False
     )
 
+
+    return render_template(
+        "dataset.html",
+
+        total_records=total_records,
+        fraud_yes=fraud_yes,
+        fraud_no=fraud_no,
+        fraud_rate=fraud_rate,
+
+        claim_bins=claim_bins,
+        claim_counts=claim_counts,
+
+        site_labels=site_labels,
+        site_values=site_values,
+
+        channel_labels=channel_labels,
+        channel_values=channel_values,
+
+        table=table
+    )
 
 @app.route('/feature_engineering')
 def feature_engineering():

@@ -2,79 +2,225 @@
 {% block content %}
 
 <h1 class="mb-4">Dataset Overview</h1>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Fraud Distribution</h5>
+                <div style="max-width:350px;">
+                    <canvas id="fraudChart" height="250"></canvas>
+                </div>
 
-<div class="card mb-4">
-    <div class="card-body">
+            </div>
+        </div>
 
+    </div>
 
-    <h5 class="card-title mb-3">Dataset Summary</h5>
+    <div class="col-md-6">
+        <div class="row g-3">
 
-    <p><strong>Total Records:</strong> {{ total_records }}</p>
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body">
 
-    <p class="mb-2"><strong>Fraud Distribution</strong></p>
+                        <h6 class="text-muted">Fraud Rate</h6>
+                        <h3>{{ fraud_rate }}%</h3>
 
-    <div style="max-width:250px;">
-        <canvas id="fraudChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <h6 class="text-muted">Total Records</h6>
+                        <h3>{{ total_records }}</h3>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <h6 class="text-muted">Fraud Cases</h6>
+                        <h3>{{ fraud_yes }}</h3>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
 
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <h5 class="card-title mb-3">Claim Amount Distribution</h5>
+
+        <canvas id="claimChart" height="100"></canvas>
+
+    </div>
+
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-md-6">
+
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title mb-3">Fraud by Accident Site</h5>
+
+                <canvas id="siteChart" height="200"></canvas>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card">
+            <div class="card-body">
+
+                <h5 class="card-title mb-3">Fraud by Channel</h5>
+
+                <canvas id="channelChart" height="200"></canvas>
+
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
 <div class="card">
 
+    <div class="card-body">
 
-<div class="card-body">
+        <h5 class="card-title mb-3">Sample Records</h5>
 
-    <h5 class="card-title mb-3">Sample Records</h5>
+        <div class="table-responsive">
+            {{ table | safe }}
+        </div>
 
-    <div class="table-responsive">
-        {{ table | safe }}
     </div>
 
 </div>
-
-
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-const ctx = document.getElementById('fraudChart');
+    document.addEventListener("DOMContentLoaded", function () {
 
-new Chart(ctx, {
-    type: 'doughnut',
+        const claimBins = {{ claim_bins | tojson
+    }};
+    const claimCounts = {{ claim_counts | tojson }};
+    const siteLabels = {{ site_labels | tojson }};
+    const siteValues = {{ site_values | tojson }};
+    const channelLabels = {{ channel_labels | tojson }};
+    const channelValues = {{ channel_values | tojson }};
+    const fraudData = {{ [fraud_no, fraud_yes] | tojson }};
 
-    data: {
-        labels: ['Non-Fraud', 'Fraud'],
 
-        datasets: [{
-            label: 'Number of Claims',
+    const fraudCtx = document.getElementById("fraudChart");
 
-            data: [Number("{{ fraud_no }}"), Number("{{ fraud_yes }}")],
-
-            backgroundColor: [
-                '#617891',   // Slate Gray
-                '#632024'    // Caput Mortuum
-            ],
-
-            borderWidth: 1
-        }]
-    },
-
-    options: {
-        responsive: true,
-
-        plugins: {
-            legend: {
-                position: 'bottom'
+    if (fraudCtx) {
+        new Chart(fraudCtx, {
+            type: "doughnut",
+            data: {
+                labels: ["Non-Fraud", "Fraud"],
+                datasets: [{
+                    data: fraudData,
+                    backgroundColor: ["#617891", "#632024"]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: "bottom" }
+                }
             }
-        }
+        });
     }
+
+    const claimCtx = document.getElementById("claimChart");
+
+    if (claimCtx) {
+        new Chart(claimCtx, {
+            type: "bar",
+            data: {
+                labels: claimBins,
+                datasets: [{
+                    label: "Claims",
+                    data: claimCounts,
+                    backgroundColor: "#617891"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
+
+    const siteCtx = document.getElementById("siteChart");
+
+    if (siteCtx) {
+        new Chart(siteCtx, {
+            type: "bar",
+            data: {
+                labels: siteLabels,
+                datasets: [{
+                    label: "Fraud Cases",
+                    data: siteValues,
+                    backgroundColor: "#632024"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
+
+    const channelCtx = document.getElementById("channelChart");
+
+    if (channelCtx) {
+        new Chart(channelCtx, {
+            type: "bar",
+            data: {
+                labels: channelLabels,
+                datasets: [{
+                    label: "Fraud Cases",
+                    data: channelValues,
+                    backgroundColor: "#25344F"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
 });
 
 </script>
-
 {% endblock %}
